@@ -24,7 +24,8 @@ dependencies {
 	implementation "org.optaplanner:optaplanner-spring-boot-starter"
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	testImplementation("org.optaplanner:optaplanner-test")
+	implementation platform("ai.timefold.solver:timefold-solver-bom:1.12.0")
+	implementation "ai.timefold.solver:timefold-solver-spring-boot-starter"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

@@ -15,10 +15,10 @@ public class MockDataGenerator {
     );
     private static final Random RANDOM = new Random();
     private static final int MAX_HUNGER = 5;
-    private static final int MAX_FACTORY_RANGE = 5000;
-    private static final int MIN_FACTORY_RANGE = 1000;
-    private static final int MAX_FACTORY_SPEED = 15;
-    private static final int MIN_FACTORY_SPEED = 5;
+    private static final int MAX_FACTORY_RANGE = 20000;
+    private static final int MIN_FACTORY_RANGE = 15000;
+    private static final int MAX_FACTORY_SPEED = 20;
+    private static final int MIN_FACTORY_SPEED = 10;
     private static final double MAX_LATITUDE = 90.0;
     private static final double MAX_LONGITUDE = 180.0;
     private static final double MIN_LATITUDE = -90.0;
@@ -26,13 +26,12 @@ public class MockDataGenerator {
     private static final int MIN_CAPACITY_COUNT = 1;
     private static final int MAX_CAPACITY_COUNT = 5;
     private static final int MAX_CAPACITY = 10;
-    private static final double MAX_DRONE_RANGE = 6000.0;
-    private static final double MIN_DRONE_RANGE = 1000.0;
-    private static final double MAX_DRONE_SPEED = 15.0;
-    private static final double MIN_DRONE_SPEED = 5.0;
+    private static final double MAX_DRONE_RANGE = 3000.0;
+    private static final double MIN_DRONE_RANGE = 500.0;
+    private static final double MAX_DRONE_SPEED = 500.0;
+    private static final double MIN_DRONE_SPEED = 300.0;
     private static final int MAX_PIZZAS_ACCEPTED = 3;
     private static List<PizzaDrone> pizzaDrones;
-
     public static List<Customer> generateCustomers(int count) {
         generateRandomPizzaDrones();
         List<Customer> customers = new ArrayList<>();
