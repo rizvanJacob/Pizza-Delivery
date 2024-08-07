@@ -14,7 +14,7 @@ public class Factory {
     private long id;
     private Location location;
     @Setter(lombok.AccessLevel.NONE)
-    private Map<PizzaDrone, Integer> capacities = new HashMap<>();
+    private Map<PizzaDrone, Integer> capacities;
     private Double deliveryRangeMeters;
     private Double deliverySpeedMetersPerSecond;
 }
