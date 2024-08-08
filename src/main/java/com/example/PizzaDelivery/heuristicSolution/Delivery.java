@@ -1,5 +1,10 @@
-package com.example.PizzaDelivery.domainObjects;
+package com.example.PizzaDelivery.heuristicSolution;
 
+import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
+import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
+import com.example.PizzaDelivery.domainObjects.Customer;
+import com.example.PizzaDelivery.domainObjects.Factory;
+import com.example.PizzaDelivery.domainObjects.PizzaDrone;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +14,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@PlanningEntity
 public class Delivery {
     private Factory factory;
     private Customer customer;
+    @PlanningVariable
     private PizzaDrone pizzaDrone;
-
     public Double getDistanceMeters() {
         return Math.sqrt(Math.pow(factory.getLocation().getLatitude() - customer.getLocation().getLatitude(), 2) + Math.pow(factory.getLocation().getLongitude() - customer.getLocation().getLongitude(), 2));
+    }
+    public boolean isFeasible() {
+        var factoryRange = factory.getDeliveryRangeMeters();
+        var pizzaRange = pizzaDrone.getDeliveryRangeMeters();
+        return factoryRange + pizzaRange >= getDistanceMeters();
     }
 
     public Long getDeliveryTimeSeconds() {

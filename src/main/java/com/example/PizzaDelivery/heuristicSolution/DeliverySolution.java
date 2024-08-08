@@ -1,12 +1,11 @@
 package com.example.PizzaDelivery.heuristicSolution;
 
+import ai.timefold.solver.core.api.solver.Solver;
+import ai.timefold.solver.core.api.solver.SolverFactory;
+import ai.timefold.solver.core.config.solver.SolverConfig;
 import com.example.PizzaDelivery.domainObjects.Customer;
-import com.example.PizzaDelivery.domainObjects.Delivery;
 import com.example.PizzaDelivery.domainObjects.Factory;
 import lombok.Getter;
-import org.optaplanner.core.api.solver.Solver;
-import org.optaplanner.core.api.solver.SolverFactory;
-import org.optaplanner.core.config.solver.SolverConfig;
 
 import java.time.Duration;
 import java.util.List;

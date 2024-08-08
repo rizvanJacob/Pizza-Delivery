@@ -11,7 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PizzaDrone {
     private String pizzaName;
-    private Long id;
     private Double deliveryRangeMeters;
     private Double deliverySpeedMetersPerSecond;
+    @Override
+    public String toString() {
+        return pizzaName;
+    }
 }

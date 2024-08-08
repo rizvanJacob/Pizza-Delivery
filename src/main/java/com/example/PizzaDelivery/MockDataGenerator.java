@@ -4,6 +4,7 @@ import com.example.PizzaDelivery.domainObjects.Customer;
 import com.example.PizzaDelivery.domainObjects.Factory;
 import com.example.PizzaDelivery.domainObjects.Location;
 import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.javadocmd.simplelatlng.LatLng;
 
 import java.util.*;
 
@@ -37,9 +38,8 @@ public class MockDataGenerator {
         List<Customer> customers = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             Customer customer = new Customer(
-                    i,
-                    generateRandomLocation(),
                     "Customer " + i,
+                    LatLng.random(RANDOM),
                     pizzaDrones,
                     RANDOM.nextInt(MAX_HUNGER) + 1
             );
@@ -52,8 +52,8 @@ public class MockDataGenerator {
         List<Factory> factories = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             Factory factory = new Factory(
-                    i,
-                    generateRandomLocation(),
+                    "Factory " + i,
+                    LatLng.random(RANDOM),
                     generateRandomCapacities(),
                     RANDOM.nextDouble() * MAX_FACTORY_RANGE + MIN_FACTORY_RANGE,
                     RANDOM.nextDouble() * MAX_FACTORY_SPEED + MIN_FACTORY_SPEED
@@ -61,12 +61,6 @@ public class MockDataGenerator {
             factories.add(factory);
         }
         return factories;
-    }
-
-    private static Location generateRandomLocation() {
-        double latitude = MIN_LATITUDE + (RANDOM.nextDouble() * (MAX_LATITUDE - MIN_LATITUDE));
-        double longitude = MIN_LONGITUDE + (RANDOM.nextDouble() * (MAX_LONGITUDE - MIN_LONGITUDE));
-        return new Location(latitude, longitude);
     }
 
     private static Map<PizzaDrone, Integer> generateRandomCapacities() {
@@ -89,7 +83,6 @@ public class MockDataGenerator {
         for (int i = 0; i < numPizzas; i++) {
             PizzaDrone drone = new PizzaDrone(
                     PIZZAS.get(RANDOM.nextInt(PIZZAS.size())),
-                    RANDOM.nextLong(Long.MAX_VALUE),
                     RANDOM.nextDouble() * MAX_DRONE_RANGE + MIN_DRONE_RANGE,
                     RANDOM.nextDouble() * MAX_DRONE_SPEED + MIN_DRONE_SPEED
             );
