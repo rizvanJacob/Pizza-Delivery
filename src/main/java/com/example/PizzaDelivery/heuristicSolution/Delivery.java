@@ -5,6 +5,8 @@ import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
 import com.example.PizzaDelivery.domainObjects.Customer;
 import com.example.PizzaDelivery.domainObjects.Factory;
 import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.javadocmd.simplelatlng.LatLngTool;
+import com.javadocmd.simplelatlng.util.LengthUnit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,7 @@ public class Delivery {
     @PlanningVariable
     private PizzaDrone pizzaDrone;
     public Double getDistanceMeters() {
-        return Math.sqrt(Math.pow(factory.getLocation().getLatitude() - customer.getLocation().getLatitude(), 2) + Math.pow(factory.getLocation().getLongitude() - customer.getLocation().getLongitude(), 2));
+        return LatLngTool.distance(factory.getLocation(), customer.getLocation(), LengthUnit.METER);
     }
     public boolean isFeasible() {
         var factoryRange = factory.getDeliveryRangeMeters();

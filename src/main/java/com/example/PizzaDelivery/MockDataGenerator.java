@@ -2,7 +2,6 @@ package com.example.PizzaDelivery;
 
 import com.example.PizzaDelivery.domainObjects.Customer;
 import com.example.PizzaDelivery.domainObjects.Factory;
-import com.example.PizzaDelivery.domainObjects.Location;
 import com.example.PizzaDelivery.domainObjects.PizzaDrone;
 import com.javadocmd.simplelatlng.LatLng;
 
