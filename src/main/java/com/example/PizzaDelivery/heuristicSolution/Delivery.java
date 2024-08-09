@@ -1,6 +1,8 @@
 package com.example.PizzaDelivery.heuristicSolution;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
+import ai.timefold.solver.core.api.domain.variable.IndexShadowVariable;
+import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
 import com.example.PizzaDelivery.domainObjects.Customer;
 import com.example.PizzaDelivery.domainObjects.Factory;
@@ -18,7 +20,9 @@ import lombok.Setter;
 @Setter
 @PlanningEntity
 public class Delivery {
+    @InverseRelationShadowVariable(sourceVariableName = "deliveries")
     private Factory factory;
+    @PlanningVariable
     private Customer customer;
     @PlanningVariable
     private PizzaDrone pizzaDrone;

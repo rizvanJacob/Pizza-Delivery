@@ -2,27 +2,33 @@ package com.example.PizzaDelivery;
 
 import com.example.PizzaDelivery.domainObjects.Customer;
 import com.example.PizzaDelivery.domainObjects.Factory;
-import com.example.PizzaDelivery.heuristicSolution.DeliverySolution;
+import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.example.PizzaDelivery.heuristicSolution.DeliveryPlan;
+import com.example.PizzaDelivery.heuristicSolution.Solver;
 
 import java.util.List;
 
 public class Main {
 	public static void main(String[] args) {
-		List<Factory> factories = MockDataGenerator.generateFactories(10);
-		List<Customer> customers = MockDataGenerator.generateCustomers(20);
+		List<PizzaDrone> pizzaDrones = MockDataGenerator.generatePizzaDrones(10);
+		List<Factory> factories = MockDataGenerator.generateFactories(10, pizzaDrones);
+		List<Customer> customers = MockDataGenerator.generateCustomers(20, pizzaDrones);
 
-		var heuristicSolution = new DeliverySolution(factories, customers);
+		var heuristicSolution = new Solver(factories, customers, pizzaDrones);
 		heuristicSolution.solve();
+		printSolution(heuristicSolution.getSolution());
+	}
 
-		var solution = heuristicSolution.getSolution().getDeliveries();
-		for (var delivery : solution) {
+	private static void printSolution(DeliveryPlan solution) {
+		var deliveries = solution.getDeliveries();
+		System.out.printf("Found %d deliveries for %d customers and %d factories\n", deliveries.size(), solution.getCustomers().size(), solution.getFactories().size());
+		for (var delivery : deliveries) {
 			var customer = delivery.getCustomer();
 			var factory = delivery.getFactory();
 			var drone = delivery.getPizzaDrone();
 			var deliveryTime = delivery.getDeliveryTimeSeconds();
-
-			System.out.printf("Customer %s ordered a pizza from Factory %s using PizzaDrone %s. The delivery took %d seconds.\n",
-					customer.getName(), factory.getId(), drone.getId(), deliveryTime);
+			System.out.printf("Factory %s delivered to customer %s using drone %s in %d seconds\n",
+					factory.toString(), customer.toString(), drone.toString(), deliveryTime);
 		}
 	}
 
