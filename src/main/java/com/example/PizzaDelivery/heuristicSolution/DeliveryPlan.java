@@ -5,11 +5,10 @@ import ai.timefold.solver.core.api.domain.solution.PlanningScore;
 import ai.timefold.solver.core.api.domain.solution.PlanningSolution;
 import ai.timefold.solver.core.api.domain.solution.ProblemFactCollectionProperty;
 import ai.timefold.solver.core.api.domain.valuerange.ValueRangeProvider;
-import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
-import com.example.PizzaDelivery.domainObjects.Customer;
-import com.example.PizzaDelivery.domainObjects.Factory;
-import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.example.PizzaDelivery.domain.Customer;
+import com.example.PizzaDelivery.domain.Factory;
+import com.example.PizzaDelivery.domain.PizzaDrone;
 import lombok.*;
 import org.springframework.stereotype.Component;
 

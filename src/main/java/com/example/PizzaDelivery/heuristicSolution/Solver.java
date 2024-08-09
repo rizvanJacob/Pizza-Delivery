@@ -2,9 +2,9 @@ package com.example.PizzaDelivery.heuristicSolution;
 
 import ai.timefold.solver.core.api.solver.SolverFactory;
 import ai.timefold.solver.core.config.solver.SolverConfig;
-import com.example.PizzaDelivery.domainObjects.Customer;
-import com.example.PizzaDelivery.domainObjects.Factory;
-import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.example.PizzaDelivery.domain.Customer;
+import com.example.PizzaDelivery.domain.Factory;
+import com.example.PizzaDelivery.domain.PizzaDrone;
 import lombok.Getter;
 
 import java.time.Duration;

@@ -3,7 +3,7 @@ package com.example.PizzaDelivery.heuristicSolution;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
 import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
-import com.example.PizzaDelivery.domainObjects.Factory;
+import com.example.PizzaDelivery.domain.Factory;
 import com.javadocmd.simplelatlng.LatLng;
 import lombok.Getter;
 

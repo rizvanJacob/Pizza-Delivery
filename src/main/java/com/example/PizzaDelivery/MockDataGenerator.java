@@ -1,8 +1,8 @@
 package com.example.PizzaDelivery;
 
-import com.example.PizzaDelivery.domainObjects.Customer;
-import com.example.PizzaDelivery.domainObjects.Factory;
-import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.example.PizzaDelivery.domain.Customer;
+import com.example.PizzaDelivery.domain.Factory;
+import com.example.PizzaDelivery.domain.PizzaDrone;
 import com.javadocmd.simplelatlng.LatLng;
 
 import java.util.*;

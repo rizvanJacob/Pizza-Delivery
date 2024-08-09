@@ -2,7 +2,7 @@ package com.example.PizzaDelivery.heuristicSolution;
 
 import ai.timefold.solver.core.api.score.buildin.hardsoft.HardSoftScore;
 import ai.timefold.solver.core.api.score.stream.*;
-import com.example.PizzaDelivery.domainObjects.Customer;
+import com.example.PizzaDelivery.domain.Customer;
 
 import java.util.function.Function;
 

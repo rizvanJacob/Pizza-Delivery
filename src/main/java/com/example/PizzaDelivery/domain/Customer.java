@@ -1,4 +1,4 @@
-package com.example.PizzaDelivery.domainObjects;
+package com.example.PizzaDelivery.domain;
 
 import com.javadocmd.simplelatlng.LatLng;
 import lombok.AllArgsConstructor;

@@ -1,15 +1,10 @@
-package com.example.PizzaDelivery.domainObjects;
+package com.example.PizzaDelivery.domain;
 
-import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
-import ai.timefold.solver.core.api.domain.variable.PlanningListVariable;
-import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
-import com.example.PizzaDelivery.heuristicSolution.Delivery;
 import com.javadocmd.simplelatlng.LatLng;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Map;
 
 @Getter

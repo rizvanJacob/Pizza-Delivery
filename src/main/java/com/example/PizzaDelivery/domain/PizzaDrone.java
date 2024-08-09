@@ -1,4 +1,4 @@
-package com.example.PizzaDelivery.domainObjects;
+package com.example.PizzaDelivery.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

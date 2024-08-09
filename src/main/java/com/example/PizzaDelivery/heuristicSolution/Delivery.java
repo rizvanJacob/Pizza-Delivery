@@ -1,12 +1,11 @@
 package com.example.PizzaDelivery.heuristicSolution;
 
 import ai.timefold.solver.core.api.domain.entity.PlanningEntity;
-import ai.timefold.solver.core.api.domain.variable.IndexShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.InverseRelationShadowVariable;
 import ai.timefold.solver.core.api.domain.variable.PlanningVariable;
-import com.example.PizzaDelivery.domainObjects.Customer;
-import com.example.PizzaDelivery.domainObjects.Factory;
-import com.example.PizzaDelivery.domainObjects.PizzaDrone;
+import com.example.PizzaDelivery.domain.Customer;
+import com.example.PizzaDelivery.domain.Factory;
+import com.example.PizzaDelivery.domain.PizzaDrone;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
 import lombok.AllArgsConstructor;
