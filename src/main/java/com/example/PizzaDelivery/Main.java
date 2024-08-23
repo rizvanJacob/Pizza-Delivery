@@ -3,9 +3,11 @@ package com.example.PizzaDelivery;
 import com.example.PizzaDelivery.domain.Customer;
 import com.example.PizzaDelivery.domain.Factory;
 import com.example.PizzaDelivery.domain.PizzaDrone;
+import com.example.PizzaDelivery.graphSolution.GraphSolution;
 import com.example.PizzaDelivery.heuristicSolution.DeliveryPlan;
 import com.example.PizzaDelivery.heuristicSolution.Solver;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -14,9 +16,12 @@ public class Main {
 		List<Factory> factories = MockDataGenerator.generateFactories(10, pizzaDrones);
 		List<Customer> customers = MockDataGenerator.generateCustomers(20, pizzaDrones);
 
-		var heuristicSolution = new Solver(factories, customers, pizzaDrones);
-		heuristicSolution.solve();
-		printSolution(heuristicSolution.getSolution());
+//		var heuristicSolution = new Solver(factories, customers, pizzaDrones);
+//		heuristicSolution.solve();
+//		printSolution(heuristicSolution.getSolution());
+
+		var graphSolution = new GraphSolution((ArrayList<Factory>) factories, (ArrayList<Customer>) customers);
+		graphSolution.solve();
 	}
 
 	private static void printSolution(DeliveryPlan solution) {
