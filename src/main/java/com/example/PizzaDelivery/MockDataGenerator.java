@@ -60,7 +60,6 @@ public class MockDataGenerator {
         List<Factory> factories = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             Factory factory = new Factory(
-                    List.of(),
                     "Factory " + i,
                     generateRandomLocation(),
                     generatePizzaDroneCapacities(pizzaDrones),
