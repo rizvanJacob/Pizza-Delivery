@@ -17,18 +17,21 @@ import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Getter
 public class GraphSolution {
-    private final ArrayList<Factory> factories;
-    private final ArrayList<Customer> customers;
+    private final List<Factory> initialFactories;
+    private final List<Customer> initialCustomers;
     private final Graph<LocationVertex, DefaultWeightedEdge> graph;
     private final LocationVertex source;
 
-    public GraphSolution(ArrayList<Factory> factories, ArrayList<Customer> customers) {
-        this.factories = factories;
-        this.customers = customers;
+    public GraphSolution(List<Factory> factories, List<Customer> customers) {
+        this.initialFactories = factories;
+        this.initialCustomers = customers;
         this.source = new LocationVertex("Source", LatLng.random());
         this.graph = new DefaultListenableGraph<>(
                 new SimpleWeightedGraph<>(DefaultWeightedEdge.class)
@@ -93,7 +96,17 @@ public class GraphSolution {
     }
 
     public void solve() {
-        customers.stream().map(this::solveFastestDelivery)
+        initialCustomers.stream().map(this::solveFastestDelivery)
                 .forEach(System.out::println);
+    }
+
+    public void startSolving(Integer interval, ChronoUnit unit) {
+        var timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                solve();
+            }
+        }, 0, unit.getDuration().toMillis() * interval);
     }
 }

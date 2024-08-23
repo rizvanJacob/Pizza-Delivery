@@ -7,6 +7,7 @@ import com.example.PizzaDelivery.graphSolution.GraphSolution;
 import com.example.PizzaDelivery.heuristicSolution.DeliveryPlan;
 import com.example.PizzaDelivery.heuristicSolution.Solver;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class Main {
 //		heuristicSolution.solve();
 //		printSolution(heuristicSolution.getSolution());
 
-		var graphSolution = new GraphSolution((ArrayList<Factory>) factories, (ArrayList<Customer>) customers);
-		graphSolution.solve();
+		var graphSolution = new GraphSolution(factories, customers);
+		graphSolution.startSolving(5, ChronoUnit.SECONDS);
 	}
 
 	private static void printSolution(DeliveryPlan solution) {
