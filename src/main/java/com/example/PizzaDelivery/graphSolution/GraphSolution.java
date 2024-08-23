@@ -12,13 +12,16 @@ import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
 import lombok.Getter;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class GraphSolution {
@@ -85,15 +88,20 @@ public class GraphSolution {
 
     private String solveFastestDelivery(Customer customer) {
         var vertex = new CustomerVertex(customer);
-        var shortestPath = new DijkstraShortestPath<>(graph).getPath(source, vertex);
-        if (shortestPath == null) {
-           return null;
+        var shortestPaths = new YenKShortestPath<>(graph).getPaths(source, vertex, 3);
+        if (shortestPaths.size() == 0) {
+            return null;
         } else {
-            var deliveryTime = shortestPath.getWeight();
-            var factory = shortestPath.getVertexList().get(1);
-            var pizza = ((LabeledWeightedEdge)shortestPath.getEdgeList().get(shortestPath.getLength() - 1)).getLabel();
-            return String.format("Fastest delivery to %s is in %f seconds from %s using %s", customer.getName(), deliveryTime, factory.getUniqueName(), pizza);
+            return shortestPaths.stream().map(this::formatPath).collect(Collectors.joining("\n"));
         }
+    }
+
+    private String formatPath(GraphPath<LocationVertex, DefaultWeightedEdge> path) {
+        var deliveryTime = path.getWeight();
+        var factory = path.getVertexList().get(1);
+        var customer = path.getEndVertex();
+        var pizza = ((LabeledWeightedEdge) path.getEdgeList().get(path.getLength() - 1)).getLabel();
+        return String.format("Fastest delivery to %s is in %f seconds from %s using %s", customer.getUniqueName(), deliveryTime, factory.getUniqueName(), pizza);
     }
 
     public void solve() {
