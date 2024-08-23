@@ -18,19 +18,17 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Getter
 public class GraphSolution {
-    private final List<Factory> initialFactories;
+    private final ArrayList<Factory> initialFactories;
     private final List<Customer> initialCustomers;
     private final Graph<LocationVertex, DefaultWeightedEdge> graph;
     private final LocationVertex source;
 
     public GraphSolution(List<Factory> factories, List<Customer> customers) {
-        this.initialFactories = factories;
+        this.initialFactories = (ArrayList<Factory>) factories;
         this.initialCustomers = customers;
         this.source = new LocationVertex("Source", LatLng.random());
         this.graph = new DefaultListenableGraph<>(
@@ -61,25 +59,27 @@ public class GraphSolution {
             return;
         }
 
+        var factoryVertex = new FactoryVertex(source);
+        var customerVertex = new CustomerVertex(target);
         var distanceMeters = LatLngTool.distance(source.getLocation(), target.getLocation(), LengthUnit.METER);
         if (distanceMeters > source.getDeliveryRangeMeters() + pizzaDrone.getDeliveryRangeMeters()) {
             return;
         }
 
         if (distanceMeters <= pizzaDrone.getDeliveryRangeMeters()) {
-            var edge = graph.addEdge(new FactoryVertex(source), new CustomerVertex(target));
-            graph.setEdgeWeight(edge, pizzaDrone.getDeliveryRangeMeters() / pizzaDrone.getDeliverySpeedMetersPerSecond());
+            graph.addEdge(factoryVertex, customerVertex, new LabeledWeightedEdge(pizzaDrone.getPizzaName()));
+            graph.setEdgeWeight(factoryVertex, customerVertex, pizzaDrone.getDeliveryRangeMeters() / pizzaDrone.getDeliverySpeedMetersPerSecond());
         } else {
             var launchPoint = new PotentialLaunchPointVertex(source, target, pizzaDrone);
             graph.addVertex(launchPoint);
 
-            var travelEdge = graph.addEdge(new FactoryVertex(source), launchPoint);
             var distanceToLaunchPointMetres = LatLngTool.distance(source.getLocation(), launchPoint.getLocation(), LengthUnit.METER);
-            graph.setEdgeWeight(travelEdge, distanceToLaunchPointMetres / source.getDeliverySpeedMetersPerSecond());
+            graph.addEdge(factoryVertex, launchPoint);
+            graph.setEdgeWeight(factoryVertex, launchPoint, distanceToLaunchPointMetres / source.getDeliverySpeedMetersPerSecond());
 
-            var launchEdge = graph.addEdge(launchPoint, new CustomerVertex(target));
+            graph.addEdge(launchPoint, customerVertex, new LabeledWeightedEdge(pizzaDrone.getPizzaName()));
             var distanceToCustomerMetres = LatLngTool.distance(launchPoint.getLocation(), target.getLocation(), LengthUnit.METER);
-            graph.setEdgeWeight(launchEdge, distanceToCustomerMetres / pizzaDrone.getDeliverySpeedMetersPerSecond());
+            graph.setEdgeWeight(launchPoint, customerVertex, distanceToCustomerMetres / pizzaDrone.getDeliverySpeedMetersPerSecond());
         }
     }
 
@@ -87,17 +87,21 @@ public class GraphSolution {
         var vertex = new CustomerVertex(customer);
         var shortestPath = new DijkstraShortestPath<>(graph).getPath(source, vertex);
         if (shortestPath == null) {
-            return "No delivery possible to " + customer.getName();
+           return null;
         } else {
             var deliveryTime = shortestPath.getWeight();
             var factory = shortestPath.getVertexList().get(1);
-            return String.format("Fastest delivery to %s is in %f seconds from %s", customer.getName(), deliveryTime, factory.getUniqueName());
+            var pizza = ((LabeledWeightedEdge)shortestPath.getEdgeList().get(shortestPath.getLength() - 1)).getLabel();
+            return String.format("Fastest delivery to %s is in %f seconds from %s using %s", customer.getName(), deliveryTime, factory.getUniqueName(), pizza);
         }
     }
 
     public void solve() {
-        initialCustomers.stream().map(this::solveFastestDelivery)
+        initialCustomers.stream()
+                .map(this::solveFastestDelivery)
+                .filter(Objects::nonNull)
                 .forEach(System.out::println);
+        System.out.println("******************************************");
     }
 
     public void startSolving(Integer interval, ChronoUnit unit) {
