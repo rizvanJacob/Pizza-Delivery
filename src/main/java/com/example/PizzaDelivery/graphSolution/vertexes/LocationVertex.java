@@ -3,12 +3,10 @@ package com.example.PizzaDelivery.graphSolution.vertexes;
 import com.javadocmd.simplelatlng.LatLng;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.Objects;
 
 @Getter
-@Setter
 @RequiredArgsConstructor
 public class LocationVertex {
     private final String uniqueName;

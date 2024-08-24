@@ -6,6 +6,7 @@ import com.example.PizzaDelivery.domain.PizzaDrone;
 import com.javadocmd.simplelatlng.LatLng;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MockDataGenerator {
     private static final List<String> PIZZAS = List.of(
@@ -23,7 +24,7 @@ public class MockDataGenerator {
     private static final double MIN_LATITUDE = -2.0;
     private static final double MAX_LONGITUDE = 5.0;
     private static final double MIN_LONGITUDE = 0.0;
-    private static final int MIN_CAPACITY_COUNT = 1;
+    private static final int MIN_CAPACITY_COUNT = 0;
     private static final int MAX_CAPACITY_COUNT = 5;
     private static final int MAX_CAPACITY = 10;
     private static final double MAX_DRONE_RANGE = 3000.0;
@@ -31,6 +32,7 @@ public class MockDataGenerator {
     private static final double MAX_DRONE_SPEED = 500.0;
     private static final double MIN_DRONE_SPEED = 300.0;
     private static final int MAX_PIZZAS_ACCEPTED = 3;
+
     public static List<Customer> generateCustomers(int count, List<PizzaDrone> pizzaDrones) {
         List<Customer> customers = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
@@ -44,7 +46,8 @@ public class MockDataGenerator {
         }
         return customers;
     }
-    private static List<PizzaDrone> generatePizzasAccepted(List<PizzaDrone> availablePizzas){
+
+    private static List<PizzaDrone> generatePizzasAccepted(List<PizzaDrone> availablePizzas) {
         var pizzasAcceptedSet = new HashSet<PizzaDrone>();
         var pizzasAcceptedCount = RANDOM.nextInt(MAX_PIZZAS_ACCEPTED) + 1;
         if (pizzasAcceptedCount > availablePizzas.size()) {
@@ -103,9 +106,20 @@ public class MockDataGenerator {
         }
         return pizzaDrones;
     }
-    private static LatLng generateRandomLocation(){
+
+    private static LatLng generateRandomLocation() {
         var latitude = RANDOM.nextDouble() * (MAX_LATITUDE - MIN_LATITUDE) + MIN_LATITUDE;
         var longitude = RANDOM.nextDouble() * (MAX_LONGITUDE - MIN_LONGITUDE) + MIN_LONGITUDE;
         return new LatLng(latitude, longitude);
+    }
+
+    private static List<Factory> updateFactoryLocations(List<Factory> factories) {
+        return factories.stream()
+                .peek(factory -> {
+                    if (RANDOM.nextBoolean()) {
+                        var newLocation = generateRandomLocation();
+                        factory.setLocation(newLocation);
+                    }
+                }).collect(Collectors.toList());
     }
 }
