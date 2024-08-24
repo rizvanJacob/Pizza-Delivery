@@ -4,8 +4,11 @@ import com.example.PizzaDelivery.domain.Customer;
 import com.example.PizzaDelivery.domain.Factory;
 import com.example.PizzaDelivery.domain.PizzaDrone;
 import com.javadocmd.simplelatlng.LatLng;
+import com.javadocmd.simplelatlng.LatLngTool;
+import com.javadocmd.simplelatlng.util.LengthUnit;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class MockDataGenerator {
@@ -113,13 +116,20 @@ public class MockDataGenerator {
         return new LatLng(latitude, longitude);
     }
 
-    private static List<Factory> updateFactoryLocations(List<Factory> factories) {
-        return factories.stream()
+    public static List<Factory> updateFactoryLocations(List<Factory> factories) {
+        AtomicInteger updateCount = new AtomicInteger();
+        var updated = factories.stream()
                 .peek(factory -> {
                     if (RANDOM.nextBoolean()) {
-                        var newLocation = generateRandomLocation();
+//                        var newLocation = generateRandomLocation();
+                        var bearing = RANDOM.nextDouble() * 360;
+                        var distance = RANDOM.nextDouble(factory.getDeliverySpeedMetersPerSecond());
+                        var newLocation = LatLngTool.travel(factory.getLocation(), bearing, distance, LengthUnit.METER);
                         factory.setLocation(newLocation);
+                        updateCount.getAndIncrement();
                     }
                 }).collect(Collectors.toList());
+        return updated;
     }
+
 }

@@ -18,12 +18,9 @@ import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DefaultListenableGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.concurrent.AsSynchronizedGraph;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -34,8 +31,9 @@ public class Engine {
     public Engine(List<Factory> initialFactories, List<Customer> initialCustomers) {
         this.source = new LocationVertex("Source", LatLng.random());
         this.graph = new DefaultListenableGraph<>(
-                new SimpleWeightedGraph<>(DefaultWeightedEdge.class)
-        );
+                        new AsSynchronizedGraph<>(
+                                new SimpleWeightedGraph<>(DefaultWeightedEdge.class)
+                        ));
 
         graph.addVertex(source);
         initialFactories.stream()
@@ -79,7 +77,7 @@ public class Engine {
         addEdgesFromFactory(factoryVertex);
     }
 
-    public void removeFactory(Factory factory){
+    public void removeFactory(Factory factory) {
         var factoryVertex = new FactoryVertex(factory);
         if (!graph.containsVertex(factoryVertex)) {
             System.err.println("Factory not found!");
@@ -91,13 +89,14 @@ public class Engine {
     }
 
     private void removeEdgesToSuccessors(LocationVertex vertex) {
-        Graphs.successorListOf(graph, vertex)
+        Graphs.successorListOf(graph, vertex).stream()
+                .filter(successor -> !successor.equals(source))
                 .forEach(successor -> {
-                    graph.removeEdge(vertex, successor);
                     if (successor instanceof PotentialLaunchPointVertex) {
                         graph.removeVertex(successor);
+                    } else {
+                        graph.removeEdge(vertex, successor);
                     }
-                    removeEdgesToSuccessors(successor);
                 });
     }
 
@@ -130,12 +129,10 @@ public class Engine {
     private void removeEdgesFromFactories(LocationVertex customer) {
         Graphs.predecessorListOf(graph, customer)
                 .forEach(predecessor -> {
-                    graph.removeEdge(predecessor, customer);
                     if (predecessor instanceof PotentialLaunchPointVertex) {
                         graph.removeVertex(predecessor);
-                    }
-                    if (!(predecessor instanceof FactoryVertex)) {
-                        removeEdgesFromFactories(predecessor);
+                    } else {
+                        graph.removeEdge(predecessor, customer);
                     }
                 });
     }
@@ -211,7 +208,7 @@ public class Engine {
                 .map(vertex -> (CustomerVertex) vertex)
                 .map(CustomerVertex::getCustomer)
                 .sorted(Comparator.comparing(Customer::getHungerLevel))
-                .limit(10)
+                .limit(5)
                 .map(CustomerVertex::new)
                 .map(this::solveFastestDelivery)
                 .filter(Objects::nonNull)
@@ -219,8 +216,38 @@ public class Engine {
         System.out.println("******************************************");
     }
 
-    public void startSolving(Integer interval, TimeUnit unit) {
-        var scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::solve, 0, interval, unit);
+    public void printTree() {
+        Set<LocationVertex> visited = new HashSet<>();
+        printTreeHelper(source, visited, "", true);
+    }
+
+    private void printTreeHelper(LocationVertex currentVertex, Set<LocationVertex> visited, String prefix, boolean isLast) {
+        // Mark the current node as visited
+        visited.add(currentVertex);
+
+        // Print the current node with the appropriate prefix and line structure
+        System.out.print(prefix);
+        if (isLast) {
+            System.out.print("|-- ");
+            prefix += "    ";
+        } else {
+            System.out.print("|-- ");
+            prefix += "|   ";
+        }
+        System.out.println(currentVertex);
+
+        // Get all connected vertices (children)
+        List<LocationVertex> children = new ArrayList<>();
+        for (DefaultWeightedEdge edge : graph.outgoingEdgesOf(currentVertex)) {
+            LocationVertex child = graph.getEdgeTarget(edge);
+            if (!visited.contains(child)) {
+                children.add(child);
+            }
+        }
+
+        // Recursively print each child with an updated prefix
+        for (int i = 0; i < children.size(); i++) {
+            printTreeHelper(children.get(i), visited, prefix, i == children.size() - 1);
+        }
     }
 }
